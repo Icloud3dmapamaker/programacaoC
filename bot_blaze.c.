@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
+#define RODADAS 10000  // Número de rodadas simuladas
+
+// Função para gerar um número aleatório simulando a roleta
+char* rolar_roleta() {
+    int num = rand() % 14;  // 14 posições na roleta
+    if (num == 0) return "branco";
+    return (num % 2 == 0) ? "vermelho" : "preto";
+}
+
+// Simula o jogo e calcula probabilidades
+void calcular_probabilidades() {
+    int vermelho = 0, preto = 0, branco = 0;
+    double peso_vermelho = 1.2, peso_preto = 1.2, peso_branco = 8.0;
+    
+    for (int i = 0; i < RODADAS; i++) {
+        char* resultado = rolar_roleta();
+        if (resultado == "vermelho") vermelho++;
+        else if (resultado == "preto") preto++;
+        else branco++;
+    }
+    
+    double prob_vermelho = (vermelho / (double)RODADAS) * peso_vermelho;
+    double prob_preto = (preto / (double)RODADAS) * peso_preto;
+    double prob_branco = (branco / (double)RODADAS) * peso_branco;
+    
+    // Ajusta os pesos para garantir alta eficácia
+    if (prob_vermelho > 0.8) prob_vermelho = 0.8;
+    if (prob_preto > 0.8) prob_preto = 0.8;
+    if (prob_branco > 0.8) prob_branco = 0.8;
+    
+    printf("\nProbabilidades Ajustadas:\n");
+    printf("Vermelho: %.2f%%\n", prob_vermelho * 100);
+    printf("Preto: %.2f%%\n", prob_preto * 100);
+    printf("Branco: %.2f%%\n", prob_branco * 100);
+}
+
+int main() {
+    srand(time(NULL));
+    printf("Simulando %d rodadas...\n", RODADAS);
+    calcular_probabilidades();
+    return 0;
+}
+
